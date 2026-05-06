@@ -80,5 +80,10 @@ source: internship-day-12
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-_（`/index` コマンドで自動生成されます）_
+**統計**: 全 1 記事 / 言語 1 記事 / 概念 0 記事 / ツール 0 記事 / 雑メモ 0 記事
+最終更新: 2026-05-06
+
+### 🔤 Languages
+
+- `2026-05-06` [TypeScript の Conditional Types の基本](languages/typescript/2026-05-06-sample-typescript-conditional-types.md) — `typescript` `types` `conditional-types`
 <!-- INDEX:END -->
