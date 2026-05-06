@@ -1,75 +1,103 @@
 ---
-description: 全記事を走査して README の「最近の記事」セクションを再生成する
+description: README の「最近の記事」セクションを再生成する（push なし）
 ---
 
 # /index - 記事インデックスを再生成する
 
-このリポジトリに保存されている全記事を走査し、`README.md` の `<!-- INDEX:START -->` と `<!-- INDEX:END -->` の間を、最新の記事一覧で置き換えてください。
+`/push` のうち、README 更新部分だけを行うコマンド。push はしない。
+普段は `/push` を使えば良いので、このコマンドは「push せずに README だけ手動で更新したい」時用。
+
+**重要: 既存記事の本文を Read ツールで読まないこと。** 必ず bash + frontmatter 抽出方式を使う。
 
 ---
 
 ## あなた（Claude）が行う処理
 
-### 1. 全記事を収集する
+### 1. bash で全記事の frontmatter のみ抽出
 
-`languages/`, `concepts/`, `tools/`, `daily/` 配下の `.md` ファイルをすべて走査する（`.gitkeep` は除外）。
+```bash
+for f in $(find languages concepts tools daily -name "*.md" -type f 2>/dev/null | sort); do
+  echo "===FILE==="
+  echo "$f"
+  awk '/^---$/{c++; next} c==1{print} c==2{exit}' "$f"
+done
+```
 
-各ファイルの frontmatter から以下を読み取る。
-- `title`
-- `date`
-- `tags`
+### 2. 出力をパースしてインデックスを生成（テーブル形式）
 
-### 2. カテゴリ別 + 日付降順でソートする
+#### 2-1. 各記事の情報を抽出
 
-カテゴリの順序: `languages` → `concepts` → `tools` → `daily`
+bash 出力から、各記事について `path`, `title`, `date` を抽出する。
 
-各カテゴリ内では `date` の **降順**（新しい順）で並べる。
+#### 2-2. カテゴリ分類
 
-### 3. インデックスを生成する
+パスの第1セグメントで判定:
+- `languages/...` → languages
+- `concepts/...` → concepts
+- `tools/...` → tools
+- `daily/...` → daily
 
-以下のフォーマットで Markdown を生成する。
+#### 2-3. ソート
 
-\`\`\`markdown
-**統計**: 全 N 記事 / 言語 X 記事 / 概念 Y 記事 / ツール Z 記事 / 雑メモ W 記事
-最終更新: YYYY-MM-DD
+各カテゴリ内で **`date` の降順**（新しい順）に並べる。
+
+#### 2-4. Markdown を生成
+
+```markdown
+全 N 記事 · 最終更新: YYYY-MM-DD
 
 ### 🔤 Languages
 
-- \`YYYY-MM-DD\` [<title>](<相対パス>) — \`tag1\` \`tag2\`
-- ...
+| 日付 | タイトル |
+|------------|------|
+| YYYY-MM-DD | [<title>](<相対パス>) |
+| ... | ... |
 
 ### 💡 Concepts
 
-- ...
+| 日付 | タイトル |
+|------------|------|
+| ... | ... |
 
 ### 🛠 Tools
 
-- ...
+| 日付 | タイトル |
+|------------|------|
+| ... | ... |
 
 ### 📝 Daily
 
-- ...
-\`\`\`
+| 日付 | タイトル |
+|------------|------|
+| ... | ... |
+```
 
-各カテゴリで記事が **0 件なら、そのセクションごと省略** する。
-記事が **6 件を超えるカテゴリは、最新 6 件のみ表示** し、最後に `_(他 N 件)_` を追加する。
+ルール:
+- 0件のカテゴリはセクションごと省略
+- 6件を超えるカテゴリは最新6件のみテーブルに表示し、テーブルの**下に** `_(他 N 件)_` を追加
+- 「最終更新」は今日の日付（`date +%F`）
+- 各カテゴリの絵文字: Languages = 🔤、Concepts = 💡、Tools = 🛠、Daily = 📝
+- テーブルのタイトルセル内にパイプ `|` が含まれる場合は `\|` にエスケープ
 
-### 4. README.md を更新する
+### 3. README.md を更新
 
-`README.md` を読み込み、`<!-- INDEX:START -->` と `<!-- INDEX:END -->` の間を上記で生成した内容で置き換える。マーカー外は変更しないこと。
+`<!-- INDEX:START -->` と `<!-- INDEX:END -->` の間を 2-4 で生成した内容で置き換える。マーカー外は変更しない。
 
-### 5. Git コミット
+### 4. 差分があればコミット
 
-\`\`\`bash
-git add README.md
-git commit -m "docs: update article index"
-\`\`\`
+```bash
+git diff --quiet README.md || (
+  git add README.md && \
+  git commit -m "docs: update article index"
+)
+```
 
-直前のコミットも README 更新だった場合は \`git commit --amend --no-edit\` でまとめてもよい。
+push はしない。push したい時は `/push` を使うか、手動で `git push origin main`。
 
-### 6. 完了報告
+### 5. 完了報告
 
-\`\`\`
+```
 ✅ インデックスを更新しました
 📊 全 N 記事
-\`\`\`
+ℹ  push は /push で行ってください
+```
