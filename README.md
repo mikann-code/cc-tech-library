@@ -80,10 +80,14 @@ source: internship-day-12
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-**統計**: 全 1 記事 / 言語 1 記事 / 概念 0 記事 / ツール 0 記事 / 雑メモ 0 記事
+**統計**: 全 2 記事 / 言語 1 記事 / 概念 0 記事 / ツール 1 記事 / 雑メモ 0 記事
 最終更新: 2026-05-06
 
 ### 🔤 Languages
 
 - `2026-05-06` [TypeScript の Conditional Types の基本](languages/typescript/2026-05-06-sample-typescript-conditional-types.md) — `typescript` `types` `conditional-types`
+
+### 🛠 Tools
+
+- `2026-05-06` [Apollo Client の使われ方（あるプロジェクトの方針）](tools/apollo-client/2026-05-06-apollo-client-usage-patterns.md) — `apollo-client` `graphql` `nextjs` `codegen` `authentication`
 <!-- INDEX:END -->
