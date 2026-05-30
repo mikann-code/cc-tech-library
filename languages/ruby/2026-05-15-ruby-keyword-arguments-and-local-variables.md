@@ -1,7 +1,7 @@
 ---
 title: Ruby のキーワード引数とローカル変数まとめ
 date: 2026-05-15
-tags: [ruby, keyword-arguments, local-variables, method-arguments]
+tags: [ruby, keyword-arguments, local-variables, method-arguments, instance-variables, rails]
 ---
 
 ## 概要
@@ -146,3 +146,119 @@ validate(user:, current_password:, email:)
 ## 一言で覚えるなら
 
 `:` は「キーワード引数として扱う」マーク。引数の宣言は「外部から値を受け取るローカル変数を作る」こと。
+
+## 追記：インスタンス変数（`@`）と View への受け渡し
+
+> §5「ローカル変数のスコープ」の続編。`@` を付けるとローカル変数ではなくインスタンス変数になり、Mailer / Controller から View にも値が渡る。
+
+### 概要
+
+```ruby
+@user = user
+@event = event
+@body_text = body_text
+```
+
+| 観点 | 内容 |
+|---|---|
+| `@` を付ける | インスタンス変数になる |
+| インスタンス変数の特徴 | 同じインスタンス内のどこからでも参照できる |
+| Mailer / Controller での使われ方 | View（テンプレート）からも参照可能になる |
+
+つまり「`@` を付けると View に渡せる」という直感はそのとおり。
+
+### 仕組みを少し詳しく
+
+#### `@` なし（ローカル変数）
+
+```ruby
+def notify(user:, ...)
+  user.email   # ← このメソッド内でだけ使える
+end
+```
+
+→ メソッドの外（View など）からは見えない。
+
+#### `@` あり（インスタンス変数）
+
+```ruby
+def notify(user:, ...)
+  @user = user   # ← インスタンス全体で共有
+end
+```
+
+→ View からも `@user` として参照可能。
+
+### View で実際に使う
+
+`app/views/event_message_mailer/notify.html.erb`（こんな感じのファイルがあるはず）:
+
+```erb
+<%= @user.name %>様
+
+<%= @body_text %>
+
+【イベント情報】
+<%= @event.title %>
+日時: <%= @event.start_at %>
+```
+
+| View 内 | 参照元 |
+|---|---|
+| `@user.name` | Mailer で `@user = user` した値 |
+| `@body_text` | Mailer で `@body_text = body_text` した値 |
+| `@event.title` | Mailer で `@event = event` した値 |
+
+→ `@` で渡したものだけが View で使える。
+
+### なぜ `subject_text` は `@` にしないのか（再確認）
+
+```ruby
+mail(to: user.email, subject: "【#{SERVICE_NAME}】#{subject_text}")
+```
+
+| 変数 | 使われ方 | `@` 必要? |
+|---|---|---|
+| `subject_text` | メソッド内で件名文字列を組み立てるだけ。View では使わない | ❌ 不要 |
+| `body_text` | View で本文として表示 | ✅ 必要 |
+
+→ **View で参照する変数だけ `@` にする**、というのが Rails の慣習。
+
+### Controller でも同じ
+
+実はこれは Mailer 限定の話ではなく、Controller でも全く同じ仕組み:
+
+```ruby
+class EventsController < ApplicationController
+  def show
+    @event = Event.find(params[:id])   # ← @ にセット
+  end
+end
+```
+
+```erb
+<%# events/show.html.erb %>
+<h1><%= @event.title %></h1>          <%# View で参照 %>
+```
+
+→ Rails の **「Controller / Mailer のインスタンス変数は自動的に View に渡る」** という規約。
+
+### まとめ
+
+| 質問 | 答え |
+|---|---|
+| `@` を付けるとインスタンス変数になる? | ✅ 正しい |
+| View に送れる? | ✅ 正しい（Mailer / Controller の場合） |
+| `@` なしだと? | メソッド内のローカル変数。View からは見えない |
+| いつ `@` を付ける? | View で参照したい値だけ |
+
+### 一行で言うと
+
+> `@` = Mailer / Controller から View へ値を渡すためのスイッチ
+
+### 追記分のポイント
+
+- `@` を付けるとローカル変数ではなく **インスタンス変数** になり、同じインスタンス内のどこからでも参照できる
+- Mailer / Controller では、インスタンス変数が **自動的に View に渡される**（Rails の規約）
+- **View で参照したい変数だけ `@` を付ける** のが慣習（件名のように内部で組み立てるだけのものは `@` 不要）
+- 同じ仕組みは Controller でも Mailer でも共通
