@@ -1,7 +1,7 @@
 ---
 title: GraphQL の N+1 問題と回避策（リゾルバで一括集計 → context 共有）
 date: 2026-05-31
-tags: [graphql, ruby, rails, n-plus-one, performance]
+tags: [graphql, ruby, rails, n-plus-one, performance, context]
 ---
 
 ## 概要
@@ -87,3 +87,87 @@ end
 
 `GROUP BY + COUNT` の結果には「no_show が1度もない人は行として現れない」ため、ハッシュにキーが存在しない。
 そのため型側で `fetch(object.user_id, 0)` の第2引数 `0` を使い、「キーが無ければ 0 回」とフォールバックしている。
+
+## 追記：context の役割を中心に整理
+
+### context とは
+
+1回のリクエストの間だけ生きる、共有の箱（Ruby の Hash）。
+リゾルバ・型・Mutation など離れた場所どうしでデータを共有するために使う。
+
+### どこで作られるか
+
+`graphql_controller.rb:13-17` で初期メンバーを定義し、`AppSchema.execute(..., context: context)` でエンジンに渡す。
+
+```ruby
+context = {
+  current_user: current_user,   # ログイン中のユーザー
+  session: session,             # セッション
+  controller: self,             # reset_session 用
+}
+```
+
+### 性質（重要な3つ）
+
+| 観点 | 性質 |
+| --- | --- |
+| 1リクエスト内 | context は 1個。全員（リゾルバ・型・Mutation）で共有 |
+| 複数リクエスト | リクエストごとに 別の1個（同時アクセスでも混ざらない） |
+| 中の要素（キー） | 何個でも追加できる |
+| 寿命 | リクエストが終わると消える（次には引き継がれない） |
+
+### 使い方：読むだけでなく「書き足せる」
+
+```ruby
+# リゾルバで要素を追加（organizer_event_applications.rb:20）
+context[:no_show_counts] = no_show_counts_by_user(organizer: user.organizer)
+
+# 型で取り出す（organizer_event_application_type.rb:25）
+(context[:no_show_counts] || {}).fetch(object.user_id, 0)
+```
+
+### なぜ context を使うのか
+
+リゾルバから型へは引数で渡せないから。
+両者はお互いを直接呼ばず、GraphQL エンジンが間に立つ。共有できる唯一の手段が context。
+
+```
+リゾルバ → context[:no_show_counts] に置く ─┐
+                                          │ 同じ箱を共有
+型     → context[:no_show_counts] を読む ─┘
+```
+
+### 型が「人数ぶん」呼ばれる理由
+
+| 主体 | 呼ばれる回数 | 理由 |
+| --- | --- | --- |
+| リゾルバ | 1回 | 「一覧を作る」処理。一覧は1個 |
+| 型 | N回（人数ぶん） | 「1人ぶんの表示」を作る処理 |
+
+→ 型の中でDBを叩くと、人数ぶんSQLが飛ぶ。
+
+### リゾルバと型の役割分担
+
+| 主体 | この値を | 役割 |
+| --- | --- | --- |
+| リゾルバ | 作って context に置く（自分は使わない） | 生産者 |
+| 型 | context から取り出して使う | 消費者 |
+
+### 速くなる理由（DB往復の観点）
+
+SQL 1回には アプリ ⇄ DB の往復時間がかかる。回数が減るほど往復が減り、速くなる。
+
+```
+処理時間
+  │          ╱ N+1（人数に比例して遅い）
+  │       ╱
+  │ ━━━━━━━━ 一括（人数が増えても一定で速い）
+  └────────── 申込者数
+```
+
+N+1 は開発中は気づきにくく、本番でデータが増えると急に遅くなるのが怖い点。
+
+### 本質
+
+DBへの往復回数をいかに減らすか。
+リゾルバ（1回呼ばれる）で一括集計し、context で型（人数ぶん呼ばれる）に渡せば、SQLが「人数分 → 2回固定」になり、DB往復が減って格段に高速化する。
