@@ -1,7 +1,7 @@
 ---
 title: 印刷ページの実装まとめ（@media print / Next.js ハイドレーション / useSyncExternalStore）
 date: 2026-06-24
-tags: [react, nextjs, hydration, use-sync-external-store, print-css, mui]
+tags: [react, nextjs, hydration, use-sync-external-store, print-css, mui, useMemo]
 ---
 
 ## 概要
@@ -66,3 +66,19 @@ useSyncExternalStore(
 - **`useSyncExternalStore` は React 18+ の公式組み込みフック**。本来は「React の外で勝手に変わる値（ブラウザ API や外部ストア）」を安全に取り込むためのもの。
 - **今回の「裏技的」な使い方**：購読すべき外部の変化が無く、「サーバーなら `false` / クライアントなら `true`」という ②③ の差だけを利用して「マウント済みか」を判定している。だから ① は空（`() => () => {}`）になっている。
 - **イメージ**：`useSyncExternalStore` は React が用意した「3 口の差し込み口がある機械」。そこにどんな部品（関数）を挿すかは自分で決める。今回は「マウント判定用の自作部品」を挿している。
+
+## 追記：なぜ `useMemo` なのか（地味に重要）
+
+`useMemo(..., [mounted])` は `mounted` が変わったときだけ中身を計算し直すので、`printedAt` の挙動はこうなる。
+
+| レンダー | `mounted` | `new Date()` を実行する？ | `printedAt` |
+| --- | --- | --- | --- |
+| 初回（SSR/ハイドレーション） | `false` | しない | `null` |
+| マウント直後 | `true` | このとき 1 回だけ実行 | 例: 00:23 の Date |
+| それ以降の再レンダー | `true`（変化なし） | しない（キャッシュを返す） | 同じ 00:23 の Date |
+
+もし `useMemo` を付けず `const printedAt = mounted ? new Date() : null;` と書くと、再レンダーのたびに `new Date()` が走って時刻がジワジワ進んでしまう（データ取得完了などで再描画されるたびに表示時刻が変わる）。`useMemo` は **「`mounted` が `true` になった瞬間の時刻でロックする」** ために使われている。
+
+### 2 行まとめ
+
+> 「クライアントでマウントした、まさにその瞬間の現在時刻を 1 回だけ取得して、その後は固定する」
