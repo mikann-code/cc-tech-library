@@ -1,0 +1,28 @@
+#!/bin/sh
+# cc-tech-library secret guard (pre-commit)
+# 公開リポジトリのため、秘匿語を含むコミットを機械的に拒否する。
+# 秘匿語を足すときは下の PATTERN に grep -E の alternation で追加する。
+#   例: PATTERN='\bPANDA\b|client-project|issue #[0-9]+'
+# 意図的に通す場合のみ `git commit --no-verify`（公開リポジトリでは非推奨）。
+
+PATTERN='\bPANDA\b'
+
+fail=0
+for f in $(git diff --cached --name-only --diff-filter=ACM); do
+  case "$f" in
+    .githooks/*) continue ;;  # ガード自身は走査しない（PATTERN 文字列で誤発火するため）
+  esac
+  hits=$(git show ":$f" 2>/dev/null | grep -inE "$PATTERN")
+  if [ -n "$hits" ]; then
+    echo "🚫 秘匿語を検出: $f"
+    printf '%s\n' "$hits" | sed 's/^/    /'
+    fail=1
+  fi
+done
+
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "コミットを中止しました。上記の秘匿語を一般化してから再コミットしてください。"
+  exit 1
+fi
+exit 0

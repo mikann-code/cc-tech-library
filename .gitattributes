@@ -1,0 +1,2 @@
+# フックスクリプトは常に LF（Windows の CRLF 混入で #!/bin/sh が壊れるのを防ぐ）
+.githooks/* text eol=lf
