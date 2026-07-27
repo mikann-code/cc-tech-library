@@ -99,7 +99,7 @@ README の「最近の記事」セクションを再生成するだけのコマ�
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-全 43 記事 · 最終更新: 2026-07-20
+全 44 記事 · 最終更新: 2026-07-27
 
 ### 🔤 Languages
 
@@ -124,12 +124,12 @@ README の「最近の記事」セクションを再生成するだけのコマ�
 
 | 日付 | タイトル |
 |------------|------|
+| 2026-07-25 | [単一エンドポイントの GraphQL を Rack::Attack でレート制限する（と、ボディ rewind の罠）](tools/rack-attack/2026-07-25-graphql-rack-attack-rate-limiting.md) |
 | 2026-07-17 | [GitHub の「Resolve conflicts」ボタンはリネームを伴うコンフリクトで無効化される — ローカル git のリネーム検知との差を知る](tools/git/2026-07-17-github-resolve-conflicts-disabled-by-rename.md) |
 | 2026-07-17 | [認証ガードのリダイレクトは router.push ではなく router.replace で書く](tools/nextjs/2026-07-17-auth-guard-router-replace-not-push.md) |
 | 2026-07-17 | [Next.js の usePathname() はクエリ文字列を含まない — ログイン後リダイレクトで ?token=xxx が消える](tools/nextjs/2026-07-17-usepathname-drops-query-string.md) |
 | 2026-07-16 | [App Router で useSearchParams() を使うページは Suspense 境界で包まないとビルドが落ちる](tools/nextjs/2026-07-16-usesearchparams-needs-suspense-boundary.md) |
 | 2026-07-16 | [Playwright で「2状態のどちらかに落ち着く」ページは locator.or() で待ってから isVisible() で分岐する](tools/playwright/2026-07-16-locator-or-wait-before-isvisible-branch.md) |
-| 2026-07-13 | [起動中の Rails dev サーバーは migrate 後の新カラムを「例外なしで」黙って保存しない](tools/rails/2026-07-13-dev-server-drops-new-column-after-migrate.md) |
 
-_(他 28 件)_
+_(他 29 件)_
 <!-- INDEX:END -->
