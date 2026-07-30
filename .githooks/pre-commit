@@ -5,7 +5,7 @@
 #   例: PATTERN='\bPANDA\b|client-project|issue #[0-9]+'
 # 意図的に通す場合のみ `git commit --no-verify`（公開リポジトリでは非推奨）。
 
-PATTERN='\bPANDA\b'
+PATTERN='\bPANDA\b|MemoRise'
 
 fail=0
 for f in $(git diff --cached --name-only --diff-filter=ACM); do

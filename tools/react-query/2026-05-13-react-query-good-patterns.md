@@ -1,13 +1,13 @@
 ---
-title: MemoRise の React Query うまく使えている部分まとめ
+title: 個人開発アプリの React Query うまく使えている部分まとめ
 date: 2026-05-13
 tags: [react-query, react, typescript, cache, hooks]
-source: MemoRise プロジェクトのコードレビュー
+source: 個人開発アプリのコードレビュー
 ---
 
 ## 概要
 
-MemoRise プロジェクトで React Query をうまく使えている部分のまとめ。Provider 配置、`queryKey` 設計、`enabled` ガード、Mutation 後のキャッシュ無効化、`setQueryData` / `removeQueries` の活用、カスタムフックでの関心分離、型付け、ロード／エラー状態の扱い、権限ごとのキー分離まで、王道パターンを全体で踏襲できている。
+個人開発アプリで React Query をうまく使えている部分のまとめ。Provider 配置、`queryKey` 設計、`enabled` ガード、Mutation 後のキャッシュ無効化、`setQueryData` / `removeQueries` の活用、カスタムフックでの関心分離、型付け、ロード／エラー状態の扱い、権限ごとのキー分離まで、王道パターンを全体で踏襲できている。
 
 ## サンプルコード
 

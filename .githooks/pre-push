@@ -4,7 +4,7 @@
 # （--no-verify や別ツールで作られたコミット、中間コミットに残った漏れも捕捉する）
 # 秘匿語は pre-commit と同じ PATTERN を使う。
 
-PATTERN='\bPANDA\b'
+PATTERN='\bPANDA\b|MemoRise'
 z40=0000000000000000000000000000000000000000
 
 fail=0
