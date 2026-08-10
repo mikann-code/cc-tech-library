@@ -107,7 +107,7 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-全 46 記事 · 最終更新: 2026-08-08
+全 47 記事 · 最終更新: 2026-08-10
 
 ### 🔤 Languages
 
@@ -123,6 +123,7 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 
 | 日付 | タイトル |
 |------------|------|
+| 2026-08-10 | [Fisher–Yates シャッフルを1行ずつ読み解く（length - 1 / i > 0 / i + 1 の意味）](concepts/algorithm/2026-08-10-fisher-yates-shuffle-line-by-line.md) |
 | 2026-05-26 | [encodeURIComponent の必要性](concepts/url-encoding/2026-05-26-encode-uri-component-necessity.md) |
 | 2026-05-19 | [パスワード再設定における脆弱性対策（列挙攻撃対策）](concepts/security/2026-05-19-password-reset-user-enumeration-defense.md) |
 | 2026-05-18 | [currentUser でデータ取得すべき理由（userId 指定の脆弱性）](concepts/security/2026-05-18-current-user-vs-user-id-idor.md) |
