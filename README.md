@@ -107,12 +107,13 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-全 47 記事 · 最終更新: 2026-08-10
+全 48 記事 · 最終更新: 2026-08-12
 
 ### 🔤 Languages
 
 | 日付 | タイトル |
 |------------|------|
+| 2026-08-10 | [`as const` は「不変にする」ためではなく「リテラル型に固定する」ために付ける](languages/typescript/2026-08-10-as-const-literal-types-not-immutability.md) |
 | 2026-07-10 | [TypeScript のジェネレーターと遅延評価で「全部作ってから探す」を「見つけたら止める」に変える](languages/typescript/2026-07-10-generator-lazy-evaluation.md) |
 | 2026-06-26 | [クラスメソッドとインスタンスメソッド — scope と def の違い](languages/ruby/2026-06-26-ruby-class-vs-instance-method-scope-def.md) |
 | 2026-05-23 | [async/await 完全ガイド - 実務で使う非同期処理のすべて](languages/typescript/2026-05-23-async-await-complete-guide.md) |
