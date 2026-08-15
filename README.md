@@ -107,7 +107,7 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-全 49 記事 · 最終更新: 2026-08-13
+全 50 記事 · 最終更新: 2026-08-15
 
 ### 🔤 Languages
 
@@ -134,12 +134,12 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 
 | 日付 | タイトル |
 |------------|------|
+| 2026-08-12 | [FCM プッシュを唯一の通知経路にすると「送れなかった」ことすら分からなくなる](tools/fcm/2026-08-12-fcm-push-only-notification-reliability.md) |
 | 2026-08-10 | [React の「state 更新 → レンダー → commit → effect」の順序を軸に、マウントとレンダーの違いと useRef / useState の使い分けを導く](tools/react/2026-08-10-render-commit-effect-order-mount-and-useref.md) |
 | 2026-08-06 | [ActiveRecord Encryption を deterministic で全面採用すると、SQL でできるのは「等価一致」だけになる](tools/rails/2026-08-06-activerecord-encryption-deterministic-query-limits.md) |
 | 2026-07-31 | [development だけ :memory_store の env 差分は、レート制限を入れた瞬間に負債になる](tools/rails/2026-07-31-cache-store-env-parity-memory-store-vs-solid-cache.md) |
 | 2026-07-25 | [単一エンドポイントの GraphQL を Rack::Attack でレート制限する（と、ボディ rewind の罠）](tools/rack-attack/2026-07-25-graphql-rack-attack-rate-limiting.md) |
 | 2026-07-17 | [GitHub の「Resolve conflicts」ボタンはリネームを伴うコンフリクトで無効化される — ローカル git のリネーム検知との差を知る](tools/git/2026-07-17-github-resolve-conflicts-disabled-by-rename.md) |
-| 2026-07-17 | [認証ガードのリダイレクトは router.push ではなく router.replace で書く](tools/nextjs/2026-07-17-auth-guard-router-replace-not-push.md) |
 
-_(他 32 件)_
+_(他 33 件)_
 <!-- INDEX:END -->
