@@ -107,7 +107,7 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 ## 📰 最近の記事
 
 <!-- INDEX:START -->
-全 53 記事 · 最終更新: 2026-09-10
+全 54 記事 · 最終更新: 2026-09-12
 
 ### 🔤 Languages
 
@@ -134,12 +134,11 @@ Claude Code を使った「学ぶ → その場で記録 → 自動分類 → Gi
 
 | 日付 | タイトル |
 |------------|------|
+| 2026-09-12 | [Flutter に「ページ」という型はない — 画面も部品も余白もすべて Widget であることを継承の連鎖とルーター定義で確かめた](tools/flutter/2026-09-12-flutter-page-is-just-a-widget-inheritance-chain-and-router.md) |
 | 2026-09-09 | [毎分 cron の時刻窓は Time.current ではなく分単位切り捨ての半開区間で決める](tools/cron/2026-09-09-cron-rake-boot-jitter-duplicate-notifications.md) |
 | 2026-09-06 | [VSCode 発のシェルで Cypress が起動しないのは ELECTRON_RUN_AS_NODE の継承が原因](tools/cypress/2026-09-06-electron-run-as-node-breaks-cypress-in-vscode-shell.md) |
 | 2026-08-18 | [毎分 cron の「時刻窓」で対象を拾うジョブは、起動の揺らぎで必ず二重実行しうる](tools/cron/2026-08-18-cron-time-window-double-execution-idempotency.md) |
 | 2026-08-12 | [FCM プッシュを唯一の通知経路にすると「送れなかった」ことすら分からなくなる](tools/fcm/2026-08-12-fcm-push-only-notification-reliability.md) |
 | 2026-08-10 | [React の「state 更新 → レンダー → commit → effect」の順序を軸に、マウントとレンダーの違いと useRef / useState の使い分けを導く](tools/react/2026-08-10-render-commit-effect-order-mount-and-useref.md) |
-| 2026-08-06 | [ActiveRecord Encryption を deterministic で全面採用すると、SQL でできるのは「等価一致」だけになる](tools/rails/2026-08-06-activerecord-encryption-deterministic-query-limits.md) |
-
-_(他 36 件)_
+_(他 37 件)_
 <!-- INDEX:END -->
